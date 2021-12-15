@@ -3,11 +3,12 @@ package dashboard_router
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/didi/gatekeeper/golang_common/lib"
 	"github.com/didi/gatekeeper/golang_common/zerolog/log"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"time"
 )
 
 var (
@@ -25,7 +26,7 @@ func HttpServerRun() {
 		MaxHeaderBytes: 1 << uint(lib.GetIntConf("base.http.max_header_bytes")),
 	}
 	go func() {
-		log.Info().Msg(lib.Purple(fmt.Sprintf("start HTTP control service [http://127.0.0.1%s/dist/]", lib.GetStringConf("base.http.addr"))))
+		log.Info().Msg(lib.Purple(fmt.Sprintf("start HTTP control service [http://%s/dist/]", lib.GetStringConf("base.http.addr"))))
 		if err := HttpSrvHandler.ListenAndServe(); err != nil {
 			log.Error().Msg(lib.Purple(fmt.Sprintf("failed to start HTTP service service [%s] %v", lib.GetStringConf("base.http.addr"), err)))
 		}

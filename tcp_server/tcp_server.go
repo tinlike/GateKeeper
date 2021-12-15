@@ -39,7 +39,6 @@ type TCPHandler interface {
 type TcpServer struct {
 	Addr        string
 	Handler     TCPHandler
-	err         error
 	BaseCtx     context.Context
 	UpdateAt    time.Time
 	ServiceName string
@@ -106,7 +105,7 @@ func (srv *TcpServer) Serve(l net.Listener) error {
 		c := srv.newConn(rw)
 		go c.serve(ctx)
 	}
-	return nil
+
 }
 
 func (srv *TcpServer) newConn(rwc net.Conn) *conn {
@@ -140,6 +139,6 @@ func (s *TcpServer) getDoneChan() <-chan struct{} {
 }
 
 func ListenAndServe(addr string, handler TCPHandler) error {
-	server := &TcpServer{Addr: addr, Handler: handler, doneChan: make(chan struct{}),}
+	server := &TcpServer{Addr: addr, Handler: handler, doneChan: make(chan struct{})}
 	return server.ListenAndServe()
 }
